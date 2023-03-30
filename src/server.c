@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 
 	/* Accept incoming connections and handle it in new thread */
 	for (;;) {
-		int csock;
-		if (tcp_accept(sock, &csock) != OK) {
+		int * csock = malloc(sizeof(int));
+		if (tcp_accept(sock, csock) != OK) {
 			fprintf(stderr, "Failed to accept new connection\n");
 			close(sock);
 			return ERR;
@@ -28,11 +28,10 @@ int main(int argc, char *argv[])
 
 		/* Handle client in new thread */
 		pthread_t thread;
-		if (pthread_create(&thread, NULL, handle, &csock) != 0 ||
-				pthread_detach(thread) != 0) {
+		if (pthread_create(&thread, NULL, handle, csock) || pthread_detach(thread)) {
 			perror("pthread()");
 			close(sock);
-			close(csock);
+			close(*csock);
 			return ERR;
 		}
 	}
@@ -49,6 +48,7 @@ int main(int argc, char *argv[])
 void * handle(void * csock)
 {
 	int sock = *((int *) csock);
+	free((int *) csock);
 
 	char buff[SOCK_BUFFER_SIZE] = {0};
 	ssize_t ret;
@@ -56,8 +56,8 @@ void * handle(void * csock)
 	for (;;) {
 
 		/* Unable to read from client socket */
-		if ((ret = read(sock, buff, SOCK_BUFFER_SIZE)) < 0) {
-			perror("read()");
+		if ((ret = recv(sock, buff, SOCK_BUFFER_SIZE, 0)) < 0) {
+			perror("recv()");
 			close(sock);
 			return NULL;
 		}
@@ -71,8 +71,8 @@ void * handle(void * csock)
 		printf("< %s", buff);
 
 		/* Echo */
-		if (write(sock, buff, ret) < 0) {
-			perror("write()");
+		if (send(sock, buff, ret, 0) < 0) {
+			perror("send()");
 			close(sock);
 			return NULL;
 		}

@@ -4,7 +4,7 @@
 CC=gcc
 CFLAGS=-g -Wall -I$(IDIR)
 LDLIBS=-lcurses
-OUTPUT=server.exe
+OUTPUT=server
 ROOTDIR=.
 IDIR=$(ROOTDIR)/include
 SDIR=$(ROOTDIR)/src
