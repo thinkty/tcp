@@ -1,6 +1,6 @@
 #include "tcp.h"
 
-int tcp_listen(unsigned short port)
+int tcp_listen(uint16_t port)
 {
 	/* Create TCP socket for IPv4 */
 	int sock = socket(AF_INET, SOCK_STREAM, 0);
