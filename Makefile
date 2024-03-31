@@ -9,7 +9,7 @@ IDIR=$(ROOTDIR)/include
 SDIR=$(ROOTDIR)/src
 ODIR=$(ROOTDIR)/obj
 
-_DEPS=tcp.h
+_DEPS=tcp.h server.h common.h
 DEPS=$(addprefix $(IDIR)/,$(_DEPS))
 
 _OBJS=tcp.o server.o
