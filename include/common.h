@@ -1,6 +1,8 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include <stdio.h>
+
 #define eprintf(format, ...) \
 	do { fprintf(stderr, format "\n" __VA_OPT__(,) __VA_ARGS__); } while (0)
 
