@@ -3,6 +3,7 @@
 
 CC=gcc
 CFLAGS=-g -Wall -Wextra -Wconversion -Wsign-conversion -I$(IDIR)
+LDFLAGS=-pthread
 OUTPUT=server
 ROOTDIR=.
 IDIR=$(ROOTDIR)/include

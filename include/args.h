@@ -7,29 +7,23 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define USAGE "\nUsage: %s <handler> -n <port number>\n\n"\
+#define USAGE "\nUsage: %s <mode> -n <port number>\n\n"\
               "  -h : print this message\n\n"\
-              "  handler:\n"\
+              "  mode:\n"\
               "    -p pool_size : use a thread pool of specified size to handle new requests\n"\
               "    -t : handle new connection in a new thread\n"\
               "    -c : handle new connection in a child process\n"
 
-/**
- * MODE_UNDEF : default value
- * MODE_TPOOL : use a thread pool of specified size to handle new requests.
- * MODE_THREAD : handle new connection in a new thread.
- * MODE_CHILDP : handle new connection in a child process.
- */
-typedef enum {
-	MODE_UNDEF,
-	MODE_TPOOL,
-	MODE_THREAD,
-	MODE_CHILDP
-} handler_t;
+
+/* MODE takes 8-bits */
+#define MASK_MODE   (0x07)
+#define MODE_TPOOL  (0x01)
+#define MODE_THREAD (0x02)
+#define MODE_CHILDP (0x04)
 
 typedef struct {
-	handler_t handler;
-	uint32_t pool_size;
+	uint8_t mode;
+	uint8_t pool_size;
 	uint16_t port;
 } args_t;
 

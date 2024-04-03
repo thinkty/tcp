@@ -3,38 +3,61 @@
 
 #include "common.h"
 #include "tcp.h"
+#include "args.h"
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <pthread.h>
+#include <errno.h>
+#include <unistd.h>
 
 /**
- * @brief Check the arguments.
+ * @brief Start accepting connections using the threads in the pool.
  *
- * @param argc Number of arguments
- * @param argv Pointer to arguments
- * @param port Pointer to port number
- * @param pool_size Pointer to thread pool size
- *
- * @return OK on success, ERR on failure.
+ * @param sock TCP socket file descriptor
+ * @param pool_size Number of threads to use in the pool
  */
-int check_args(int argc, char * argv[], uint16_t * port, uint32_t * pool_size);
+void start_tpool(int sock, uint32_t pool_size);
 
 /**
- * @brief Accept and handle new connections.
+ * @brief Start accepting connections and spawn new threads.
  *
- * @param sock TCP socket
+ * @param sock TCP socket file descriptor
+ */
+void start_thread(int sock);
+
+/**
+ * @brief Start accepting connections and spawn child processes.
+ *
+ * @param sock TCP socket file descriptor
+ */
+void start_childp(int sock);
+
+/**
+ * @brief Task to accept and handle new connections.
+ *
+ * @param sock TCP socket file descriptor
  *
  * @return NULL
  */
-void * server_accept(void * sock);
+void * accept_task(void * sock);
+
+/**
+ * @brief Wrapper of echo to pass to a thread.
+ *
+ * @param sock TCP socket file descriptor
+ *
+ * @return NULL
+ */
+void * echo_task(void * csock);
 
 /**
  * @brief Read from client socket and echo.
  *
- * @param csock TCP client socket
+ * @param csock TCP client socket file descriptor
  */
-void handle(int csock);
+void echo(int csock);
 
 #endif
 
