@@ -11,7 +11,7 @@
 #include <sys/socket.h> /* socket(), bind(), listen(), accept() */
 #include <unistd.h>     /* read(), write() */
 
-#define SOCK_LISTEN_Q_LEN (5)   /* Number of connections to buffer */
+#define SOCK_LISTEN_Q_LEN (128) /* Number of connections to buffer */
 #define SOCK_BUFFER_SIZE  (100)
 
 /**
