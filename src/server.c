@@ -3,7 +3,7 @@
 int main(int argc, char *argv[])
 {
 	args_t args;
-	if (check_args(argc, argv, &args) == ERR) {
+	if (check_args(argc, argv, &args)) {
 		return ERR;
 	}
 
@@ -77,7 +77,7 @@ void * accept_task(void * sock)
 {
 	for (;;) {
 		int csock;
-		if (tcp_accept(*((int *) sock), &csock) != OK) {
+		if (tcp_accept(*((int *) sock), &csock)) {
 			eprintf("Failed to accept new connection");
 			return NULL;
 		}
@@ -105,11 +105,11 @@ void start_thread(int sock)
 
 		/* Create new thread and detach on new connection */
 		pthread_t thread;
-		if ((errno = pthread_create(&thread, NULL, echo_task, csock)) != 0) {
+		if ((errno = pthread_create(&thread, NULL, echo_task, csock))) {
 			perror("pthread_create(handler_thread)");
 			break;
 		}
-		if ((errno = pthread_detach(thread)) != 0) {
+		if ((errno = pthread_detach(thread))) {
 			perror("pthread_detach(handler_thread)");
 			break;
 		}
